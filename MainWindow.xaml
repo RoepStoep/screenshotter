@@ -1,0 +1,69 @@
+﻿<Window x:Class="Screenshotter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Screenshotter"
+        mc:Ignorable="d"
+        Title="Screenshotter - idle" Name="MainInterface" Height="450" Width="800">
+    <Grid Margin="2">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <TextBlock>Interval (ms):</TextBlock>
+            <TextBox Name="txtInterval">1000</TextBox>
+            <Button Margin="0,8,0,0" Name="btnStartCapture" Click="btnStartCapture_Click" >Start recording</Button>
+            <Button Margin="0,8,0,0" Name="btnStopCapture" IsEnabled="False" Click="btnStopCapture_Click">Stop recording</Button>
+            <Button Margin="0,24,0,0" Name="btnAddSource" Click="btnAddSource_Click" >Add source</Button>
+            <TextBlock Margin="0,4,0,0" TextWrapping="Wrap" >NOTE: If a black screen is captured from chrome (or other browsers), disable hardware acceleration. UWP apps are not supported.</TextBlock>
+        </StackPanel>
+
+        <ItemsControl Name="icCaptureSources" Grid.Column="1">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding WindowTitle}"/>
+                        <Border Grid.Row="1" BorderThickness="1" BorderBrush="#FF000000">
+                            <Image Source="{Binding WindowImage}" Stretch="Uniform"/>
+                        </Border>
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Content="{Binding SelectWindowCaption}" Command="{Binding SelectWindowCommand}"/>
+                                <Button Grid.Column="1" Content="{Binding RemoveSourceCaption}" Command="{Binding RemoveSourceCommand}" />
+                            </Grid>
+                            <TextBlock Grid.Row="1" Text="{Binding Path}"/>
+                            <Button Grid.Row="1" Padding="2,0,2,0" HorizontalAlignment="Right" Command="{Binding SelectPathCommand}">...</Button>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Popup Name="popupWindows" Placement="Mouse" StaysOpen="False" Opened="popupWindows_Opened" >
+            <ListBox Name="lstWindows" Width="320" Height="240" SelectionChanged="lstWindows_SelectionChanged"/>
+        </Popup>
+        
+    </Grid>
+</Window>
